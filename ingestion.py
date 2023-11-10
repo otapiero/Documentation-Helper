@@ -6,6 +6,8 @@ from langchain.vectorstores import Pinecone
 import pinecone
 import dotenv
 
+from consts import INDEX_NAME
+
 dotenv.load_dotenv()
 pinecone.init(
     api_key=os.environ["PINECONE_API_KEY"],
@@ -36,7 +38,7 @@ def ingest_docs() -> None:
     model_kwargs = {"device": "cpu"}
     embeddings = HuggingFaceEmbeddings(model_name=model_id, model_kwargs=model_kwargs)
     Pinecone.from_documents(
-        documents=documents, embedding=embeddings, index_name="langchain-doc-index"
+        documents=documents, embedding=embeddings, index_name=INDEX_NAME
     )
 
     print("Done ingesting documents")

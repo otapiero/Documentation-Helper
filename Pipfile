@@ -20,6 +20,11 @@ streamlit-chat = "*"
 tqdm = "*"
 python-dotenv = "*"
 sentence-transformers = "*"
+anyio = "*"
+distro = "*"
+httpx = "*"
+pydantic = "*"
+typing-extensions = "*"
 
 [dev-packages]
 
