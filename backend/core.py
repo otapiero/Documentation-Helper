@@ -9,6 +9,7 @@ import pinecone
 import dotenv
 
 from consts import INDEX_NAME
+
 dotenv.load_dotenv()
 pinecone.init(
     api_key=os.environ["PINECONE_API_KEY"],
@@ -39,5 +40,6 @@ def get_embeddings():
 
 
 if __name__ == "__main__":
-    query = "can i change RetrievalQA.from_chain_type so it will use more than vector as context?"
-    print(run_llm(query=query))
+    query = "what are the chain type of string other than \"stuff\" 'chain_type' can receive in  RetrievalQA.from_chain_type?"
+    result = run_llm(query)
+    print()
