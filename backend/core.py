@@ -1,9 +1,9 @@
 import os
-from typing import Any
+from typing import Any, List, Tuple
 
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.chat_models import ChatOpenAI
-from langchain.chains import RetrievalQA
+from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores import Pinecone
 import pinecone
 import dotenv
@@ -17,19 +17,18 @@ pinecone.init(
 )
 
 
-def run_llm(query: str) -> Any:
+def run_llm(question: str, chat_history: List[Tuple[str, Any]]) -> Any:
     embeddings = get_embeddings()
     docsearch = Pinecone.from_existing_index(
         index_name=INDEX_NAME, embedding=embeddings
     )
     chat_model = ChatOpenAI(verbose=True, temperature=0)
-    chain = RetrievalQA.from_chain_type(
+    chain = ConversationalRetrievalChain.from_llm(
         llm=chat_model,
-        chain_type="stuff",
         retriever=docsearch.as_retriever(),
         return_source_documents=True,
     )
-    return chain({"query": query})
+    return chain({"question": question, "chat_history": chat_history})
 
 
 def get_embeddings():
@@ -41,5 +40,5 @@ def get_embeddings():
 
 if __name__ == "__main__":
     query = "what are the chain type of string other than \"stuff\" 'chain_type' can receive in  RetrievalQA.from_chain_type?"
-    result = run_llm(query)
+    result = run_llm(query, [])
     print()
